@@ -1,0 +1,86 @@
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <iostream> 
+using namespace std;
+
+char arr[6] ;
+int n; 
+int answer = 0 ; 
+int len(char arr[6])
+{
+	int d = 0 ; 
+	for(int i = 0 ; arr[i] != 0 ; i++)
+	{
+		d++ ; 
+	}
+	return d ; 
+}
+int convert(char arr[6])
+{
+	int sum  = 0 ; 
+	for(int i = 0 ; i < len(arr) ; i++)
+	{
+		sum = sum*10 + (arr[i] - '0') ; 
+	}
+	return sum ; 
+}
+void play(int i , int k)
+{
+	if(i == len(arr))
+	{
+		bool check = false ; 
+
+		if(((n-k) % 2) != 0 )
+		{
+			char temp = arr[len(arr) - 1] ;
+			arr[len(arr) - 1] = arr[len(arr)-2] ; 
+			arr[len(arr)-2] = temp ; 
+
+			check = true ; 
+		}
+		int number = convert(arr) ; 
+		if(number > answer) 
+			answer = number ; 
+		if(check)
+		{
+			char temp = arr[len(arr) - 1] ;
+			arr[len(arr) - 1] = arr[len(arr)-2] ; 
+			arr[len(arr)-2] = temp ; 
+		}
+		return ; 
+	}
+
+	if(k<n)
+	{
+		for(int index = i + 1 ; index < len(arr) ; index++)
+		{
+			char temp = arr[i] ;
+			arr[i] = arr[index] ; 
+			arr[index] = temp ; 
+			play(i+1 , k+1);
+			temp = arr[i] ;
+			arr[i] = arr[index] ; 
+			arr[index] = temp ; 
+		}
+	}
+	play(i + 1 , k) ; 
+}
+
+int main() {
+	freopen("input.txt" , "r" , stdin) ; 
+	int T ; 
+	cin >> T ; 
+	for(int tc = 1 ; tc <= T ; tc++)
+	{
+
+		cin >> arr ; 
+
+		cin >> n ; 
+		play(0,0);
+		cout << "Case #" << tc << endl ; 
+		cout << answer << endl ; 
+		answer = 0 ; 
+	}
+	return 0 ; 
+}
