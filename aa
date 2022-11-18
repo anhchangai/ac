@@ -1,0 +1,82 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <iostream> 
+using namespace std;
+
+int arr[10] = {-1,0,-9,6,7,-6,1,5,4,-2}; 
+int visited[10] = {0} ; 
+int result[10] ; 
+int n = 6 ; 
+void xuat(int k)
+{
+	int sum = 0 ; 
+	for(int i = 0 ; i < k ; i++)
+	{
+		sum += result[i] ; 
+	}
+	if(sum==0)
+	{
+		for(int i = 0 ; i < k ; i++)
+		{
+			cout << arr[i] << " " ; 
+		}
+		cout << endl ; 
+	}
+
+}
+
+void hoanVi(int i , int start , int k)
+{
+	if (i == k)
+	{
+		int sum = 0 ; 
+		for(int i = 0 ; i < k ; i++)
+		{
+			sum += result[i] ; 
+		}
+		if(sum==0)
+		{
+			for(int i = 0 ; i < k ; i++)
+			{
+				cout << result[i] << " " ; 
+			}
+			cout << endl ; 
+		}
+	}
+	else 
+	{
+		for (int j = start; j < n; j++) {
+			if (!visited[j]) {
+				result[i] = arr[j]; 
+				visited[j] = 1;
+				hoanVi(i + 1,j,k);
+				visited[j] = 0;
+			}
+		}
+	}
+}
+void subset(int i , int sum)
+{
+	if(i == n) return ; 
+	if(sum == 0 )
+	{
+		for(int j = 0 ; j < 10 ; j++)
+		{
+			if(visited[j] == 1)
+				cout << arr[j] << " " ; 
+		}
+		cout << endl ; 
+	}
+	visited[i] = 1 ; 
+	subset(i+1,sum + arr[i]) ; 
+	visited[i] = 0 ; 
+	subset(i+1,sum) ; 
+}
+int main() {
+	subset(0,0) ; 
+	for(int i = 0 ; i < 6 ; i++)
+	{
+		hoanVi(0,0, i) ; 
+	}
+	return 0 ; 
+}
