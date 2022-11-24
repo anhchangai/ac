@@ -1,0 +1,157 @@
+#include <iostream>
+using namespace std;
+int n  ; 
+char A[5][5] ; 
+int arr[5][5] ; 
+int KQ = 0 ; 
+int count1 = 0 ; 
+bool check(int i , int j)
+{
+	int x = i ; 
+	int y = j ;
+
+	while(x>=0)
+	{
+		if(arr[x][y] == 2)
+			break ; 
+		if(arr[x][y] == 1)
+			return false ; 
+		x-- ; 
+	}
+	x = i ; 
+	y = j ; 
+
+	while(y>=0)
+	{
+		if(arr[x][y] == 2)
+			break ; 
+		if(arr[x][y] == 1)
+			return false ; 
+		y-- ; 
+	}
+	return true ; 
+}
+void upV(int x, int y ,  int c)
+{
+	A[x][y] += c ; 
+	for(int t = x + 1 ; t < n ; t++)
+		{
+			if(arr[t][y] >= 0 ) arr[t][y] += c ;
+			else break ; 
+		}
+		for(int t = x - 1 ; t >= 0 ; t--)
+		{
+			if(arr[t][y] >= 0 ) arr[t][y] += c;
+			else break ; 
+		}
+		for(int t = y + 1 ; t < n ; t++)
+		{
+			if(arr[x][t] >= 0 ) arr[x][t] += c ;
+			else break ; 
+		}
+		for(int t = y - 1 ; t >= 0 ; t++)
+		{
+			if(arr[x][t] >= 0 ) arr[x][t] += c;
+			else break ; 
+		}
+}
+void BT(int i)
+{
+	if(i == n*n)
+	{
+		if(KQ < count1 )
+		{
+			KQ = count1 ; 
+			
+		}
+		return ; 
+	}
+
+	BT(i+1) ; 
+
+	if(arr[i/n][i%n] == 0)
+	{
+		int x = i/n ; 
+		int y = i%n ; 
+		count1++ ; 
+		//arr[x][y] = count1 ;
+		upV(x,y,count1) ;
+		BT(i+1);
+		upV(x,y,-count1) ;
+		//arr[x][y] = 0 ;
+		count1 -- ; 
+	}
+
+	
+}
+int main(){
+	freopen("input.txt", "r", stdin);
+	int T ; 
+	cin >> T;
+	for (int tc = 1; tc <= T; tc++)
+	{
+		cin >> n ; 
+		KQ = 0 ; 
+		for(int i = 0 ; i < n; i++)
+		{
+			cin >> A[i] ;
+			for(int j = 0 ; j < n ; j ++)
+			{
+				if(A[i][j] == 'X')
+				{
+					arr[i][j] = -1 ; 
+				}
+				else arr[i][j] = 0 ; 
+			}
+		}
+		BT(0) ; 
+		cout << "Case #" << tc << endl ; 
+		cout << KQ << endl ; 
+
+	}
+	return 0;
+}
+
+5
+
+4
+
+.X..
+
+....
+
+XX..
+
+....
+
+2
+
+XX
+
+.X
+
+3
+
+.X.
+
+X.X
+
+.X.
+
+3
+
+...
+
+.XX
+
+.XX
+
+4
+
+....
+
+....
+
+....
+
+....
