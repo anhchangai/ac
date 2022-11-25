@@ -1,0 +1,307 @@
+#include <iostream>
+using namespace std;
+char arr[5][5] ; 
+int max1 = 999999 ; 
+int n = 4 ; 
+int vs[4][4] = {0} ; 
+int arrInt[5][5] ; 
+char copy1[5][5] ; 
+
+int dx[4] = {-1,0,0,1} ; 
+int dy[4] = {0,1,-1,0} ;
+bool check = false ; 
+bool checkD()
+{
+	int ix = arrInt[0][0] ; 
+	for(int i = 0 ; i < 4 ; i++)
+	{
+		for(int j = 0 ; j < 4 ; j++)
+		{
+			if(arrInt[i][j] != ix)
+				return false ; 
+		}
+	}
+	return true ; 
+}
+
+void swap(int x , int y)
+{
+	arrInt[x][y] = 3 - arrInt[x][y] ; 
+	for(int i = 0 ; i < 4 ; i++)
+	{
+		int xx = x + dx[i] ; 
+		int yy = y + dy[i] ; 
+		if(xx >= 0 && yy >= 0 && xx <n && yy < n )
+		{
+			arrInt[xx][yy] = 3 - arrInt[xx][yy] ; 
+		}
+	}
+}
+
+void BT(int i , int count)
+{
+	if(i == 16 || checkD())
+	{
+		if(max1 > count && checkD())
+		{
+			check = true ; 
+			max1 = count ; 
+		}
+		return ; 
+	}
+	BT(i+1,count);
+	if(vs[i/n][i%n] == 0)
+	{
+		int x = i/n ; 
+		int y = i%n ; 
+		vs[x][y] = 1 ; 
+		swap(x,y) ;
+		/*for(int i = 0 ; i < 4 ; i++)
+		{
+			for(int j = 0 ; j < 4 ; j++)
+			{
+				cout << arrInt[i][j] << " " ; 
+			}
+			cout << endl ; 
+		}
+		cout << endl ;*/ 
+		BT(i+1 , count+1) ; 
+		swap(x,y) ; 
+		vs[x][y] = 0 ; 
+	}
+
+}
+
+int main(){
+	//freopen("input.txt", "r", stdin);
+	int T ; 
+	cin >> T;
+	for (int tc = 1; tc <= T; tc++)
+	{
+		for(int i = 0 ; i < 4 ; i++)
+		{
+			cin >> arr[i] ; 
+		}
+		check = false ; 
+		max1 = 999999 ; 
+		for(int i = 0 ; i < 4 ; i++)
+		{
+			for(int j = 0 ; j < 4 ; j++)
+			{
+				vs[i][j] = 0 ; 
+				if(arr[i][j] == 'w') 
+					arrInt[i][j] = 1 ; 
+				else arrInt[i][j] = 2 ; 
+			}
+		}
+		cout << "Case #" << tc << endl ; 
+		BT(0,0);
+		if(check)
+		{
+			cout << max1 << endl  ; 
+		} else cout << "impossible" << endl ; 
+	}
+	return 0;
+}
+
+50
+wbwb
+wbbw
+wbww
+wbww
+bbwb
+bbbw
+wbww
+bwwb
+bbbb
+wwbw
+bwbb
+bbbb
+bwwb
+bwww
+wwbb
+wbbb
+wbbb
+bbww
+bbwb
+wwbw
+wbwb
+bwww
+bwbw
+wwbw
+wbww
+wbww
+bbbw
+bwwb
+wbbw
+wbwb
+bbbb
+wbww
+wbww
+wbwb
+wwww
+bwwb
+bwwb
+bbww
+bwww
+bbbw
+bwbw
+wwbw
+wwww
+wbww
+bwbb
+bwww
+bwbb
+wwww
+wbbw
+bbbb
+bwww
+bbww
+wbwb
+bwbw
+bwbw
+bwbw
+bbww
+bbwb
+bbbw
+wwwb
+bwbb
+wbbw
+wwww
+bwbb
+bbww
+wbbw
+bbbw
+wbbw
+bwbb
+bbww
+wbww
+wbbb
+bwwb
+bbww
+wwww
+wwbw
+bbbb
+bwbb
+wwww
+bwww
+bwbw
+wwbw
+wwbb
+wwww
+bwww
+bwbb
+bbwb
+wwwb
+wwww
+bwbw
+bbbb
+wbww
+bwbb
+wwwb
+wbww
+bwwb
+bwww
+bbwb
+wwbb
+bbwb
+wbww
+bwww
+wbww
+bwwb
+bwbb
+wbbw
+bwwb
+wbww
+bbbw
+wwww
+wwbw
+wbbw
+wwbw
+bbbw
+bwwb
+wbbb
+bwbw
+bwbb
+bbwb
+bwbw
+bwww
+wwww
+bbbw
+wwbw
+wbww
+wbww
+wbbb
+wbbw
+bbbb
+wwww
+bbbb
+bwwb
+wwww
+wbwb
+wbwb
+bwwb
+bbwb
+bbww
+bbbb
+bwwb
+wwww
+wwbb
+wbbw
+wbww
+bbwb
+wwww
+wwww
+wwww
+wwww
+wwww
+bwbb
+bbww
+bwbb
+wwww
+wbbb
+bwww
+bwbw
+wwbb
+wbww
+bbbb
+bwww
+wbwb
+wwbb
+wbbb
+wbww
+wwbb
+bbbw
+wbwb
+wwwb
+bbbw
+bwww
+wwwb
+bwbb
+bwbb
+wwww
+wbwb
+wbbw
+bwwb
+bbbw
+bbww
+wbwb
+bwbw
+wwbb
+wbwb
+bwbb
+bbbb
+wbwb
+bwwb
+bwbw
+bwwb
+bwbw
+bwww
+bwbw
+wwww
+bbwb
+bwwb
+bbbb
+bbbb
+bbbb
+bbbb
