@@ -1,0 +1,94 @@
+#include <iostream>
+using namespace std;
+int data[10][11] ; 
+bool vs[7][8] ; 
+bool vsD[7][7] ; 
+int count1 = 0 ;
+void xuat()
+{
+	for(int i = 0 ; i < 7 ; i++ )
+	{
+		for(int j = 0 ; j < 7 ; j++)
+		{
+			cout << vsD[i][j] << " " ; 
+		}
+		cout << endl ; 
+	}
+	cout << endl ;  
+}
+void BT(int i)
+{
+	if(i == 56)
+	{
+		count1 ++ ; 
+		return ; 
+	}
+
+	int r = i / 8 ; 
+	int c = i % 8 ; 
+	if(!vs[r][c])
+	{
+
+
+		if( c + 1 < 8 && !vs[r][c+1])
+		{
+			int d1 = data[r][c] ;
+			int d2 = data[r][c+1] ;
+			if(!vsD[d1][d2])
+			{
+				vs[r][c] = vs[r][c+1] = 1 ; 
+				vsD[d1][d2] = vsD[d2][d1] = 1 ; 
+				BT(i+1) ; 
+				vs[r][c] = vs[r][c+1] = 0; 
+				vsD[d1][d2] = vsD[d2][d1] = 0 ; 
+			}
+		}
+		if(r + 1 < 7 && !vs[r+1][c])
+		{
+			int d1 = data[r][c] ;
+			int d3 = data[r+1][c] ; 
+			if(!vsD[d1][d3])
+			{
+				vs[r][c] = vs[r+1][c] = 1 ; 
+				vsD[d1][d3] = vsD[d3][d1] = 1 ; 
+				BT(i+1) ; 
+				vs[r][c] = vs[r+1][c] = 0 ; 
+				vsD[d1][d3] = vsD[d3][d1] = 0 ; 
+			}
+		}
+
+	}
+	else 
+	{
+		BT(i+1) ; 
+	}
+
+
+}
+int main(){
+	freopen("input.txt", "r", stdin);
+	int T;
+	cin >> T;
+	for(int tc = 1; tc <= T; tc++) {
+		count1 = 0 ; 
+		for(int i = 0 ; i < 7 ; i++ )
+		{
+			for(int j = 0 ; j < 8 ; j++)
+			{
+				cin >> data[i][j] ; 
+				vs[i][j] = false ; 
+			}
+		}
+		for(int i = 0 ; i < 7 ; i++ )
+		{
+			for(int j = 0 ; j < 7 ; j++)
+			{
+				vsD[i][j] = false ; 
+			}
+		}
+		BT(0) ; 
+
+		cout << "#" << tc << " " <<  count1 << endl ; 
+	}
+	return 0;
+}
