@@ -1,0 +1,167 @@
+#include <iostream>
+using namespace std;
+#define oo 9999999  
+#define MAXN 100
+int A[MAXN][MAXN] ; 
+int vs[MAXN][MAXN] ; 
+int vsZ[MAXN][MAXN] ; 
+int xS , yS , xE, yE ; 
+int n , m ; 
+int f = -1 ; 
+int r = -1 ; 
+int Qx[MAXN*MAXN] ;
+int Qy[MAXN*MAXN] ;
+int d ; 
+int k[8][2]={{-1,-1},{-1,0},{0,-1},{-1,1},{0,1},{1,0},{1,-1},{1,1}};
+int z[8][2]={{-2,-1},{-1,-2},{-2,1},{-1,2},{1,-2},{2,-1},{2,1},{1,2}};
+bool check = false; 
+void checkZ(int x , int y)
+{
+	for(int i = 0 ; i < 8 ; i++)
+	{
+		int xx = x + z[i][0] ; 
+		int yy = y + z[i][1] ; 
+		if(xx >= 0 && yy >= 0 && xx < n && yy < m)
+		{
+			vsZ[xx][yy] = 1 ; 
+		}
+	}
+}
+void xuatA()
+{
+	for(int i = 0 ; i < n ; i++)
+	{
+		for(int j = 0 ; j < m ; j++)
+		{
+			cout << A[i][j] << " " ; 
+		}
+		cout << endl ; 
+	}
+	cout << endl ; 
+}
+void xuat()
+{
+	for(int i = 0 ; i < n ; i++)
+	{
+		for(int j = 0 ; j < m ; j++)
+		{
+			cout << vs[i][j] << " " ; 
+		}
+		cout << endl ; 
+	}
+	cout << endl ; 
+}
+void xuat1()
+{
+	for(int i = 0 ; i < n ; i++)
+	{
+		for(int j = 0 ; j < m ; j++)
+		{
+			cout << vsZ[i][j] << " " ; 
+		}
+		cout << endl ; 
+	}
+	cout << endl ; 
+}
+int bfs(int x , int y)
+{
+	f = r = -1 ;
+	Qx[++r] = x ; 
+	Qy[r] = y ;
+	while(f!=r)
+	{
+		x = Qx[++f] ; 
+		y = Qy[f] ;
+		vs[x][y] = 1 ; 
+		for(int i = 0 ; i < 8 ; i++)
+		{
+			int xx = x + k[i][0] ; 
+			int yy = y + k[i][1] ; 
+
+			if(xx >= 0 && yy >= 0 && xx < n && yy < m && vs[xx][yy] == 0 && xx == xE && yy == yE)
+			{
+				A[xx][yy] = A[x][y] +1 ; 
+				/*xuatA() ;
+				xuat() ;*/ 
+				check = true ; 
+				return A[xx][yy] ; 
+			}
+			if(xx >= 0 && yy >= 0 && xx < n && yy < m && vs[xx][yy] == 0 && A[xx][yy] == 0 && vsZ[xx][yy] == 0 )
+			{
+				vs[xx][yy] = 1 ; 
+
+				A[xx][yy] = A[x][y] +1 ; 
+				/*xuatA() ;
+				xuat() ;*/ 
+				Qx[++r] = xx ; 
+				Qy[r] = yy ;
+			}
+		}
+	}
+}
+
+int main(){
+	freopen("input.txt", "r", stdin);
+	int T;
+	cin >> T;
+	for(int tc = 1; tc <= T; tc++) 
+	{
+		cin >> m >> n  ; 
+		d = 0 ; 
+		check = false ; 
+		for(int i = 0 ; i < n ; i++)
+		{
+			for(int j = 0 ; j < m ; j++)
+			{
+				char c ; 
+				cin >> c ; 
+				if(c == '.')
+				{
+					A[i][j]= 0 ; 
+				}
+				else if(c == 'Z')
+				{
+					A[i][j] = 1 ; 
+					vsZ[i][j] = 1 ; 
+					checkZ(i,j) ; 
+				}
+				else if(c == 'A')
+				{
+					A[i][j] = 0 ; 
+					xS = i ; 
+					yS = j ; 
+				}
+				else if(c == 'B')
+				{
+					A[i][j] = 0 ; 
+					xE = i ; 
+					yE = j ; 
+				}
+			}
+		}
+		/*xuatA() ;
+		xuat1() ;*/ 
+		d = bfs(xS,yS) ; 
+
+		if(check)
+		{
+			cout << d << endl ;
+		}
+		else cout << -1 << endl ; 
+
+		// reset 
+		for(int i = 0 ; i < n ; i++)
+		{
+			for(int j = 0 ; j < m ; j++)
+			{
+				vs[i][j] = 0 ; 
+				vsZ[i][j] = 0 ; 
+			}
+		
+		}
+
+
+	}
+	return 0;
+}
+
