@@ -1,0 +1,86 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <iostream> 
+using namespace std;
+#define MaxN 10
+
+int N , M ; 
+double D[MaxN] ;
+double M1[MaxN];
+double x ; 
+double abs1(double a )
+{
+	if(a>0) return a ; 
+	else return -a ; 
+}
+void DQ(double s , double e , int id)
+{
+	while(s<e)
+	{
+		x = (s+e)/2 ;
+		double Fl = 0  ;
+		double Fr = 0  ; 
+		for(int i = 0 ; i < id ; i++ )
+		{
+			Fl += M1[i]/((x-D[i]) * (x-D[i]))  ; 
+		}
+		for(int i = id ; i < N ; i++ )
+		{
+			Fr += M1[i]/((x-D[i]) * (x-D[i]))  ; 
+		}
+		if( abs1(Fl-Fr) < 0.000000001) 
+		{
+			return ;
+		}
+		else if(Fl > Fr)
+		{
+			s = x  ; 
+		}
+		else
+		{
+			e = x ; 
+		}
+	}
+}
+int main() {
+	freopen("input.txt" , "r" , stdin) ; 
+	for(int tc = 1 ; tc <= 10 ; tc++)
+	{
+		cin >> N ; 
+		x = 0 ; 
+		for(int i = 0 ; i < N ; i++)
+		{
+			cin >> D[i];
+		}
+		for(int i = 0 ; i < N ; i++)
+		{
+			cin >> M1[i];
+		}
+		cout << "#" << tc << " " ; 
+		for(int i = 0 ; i < N - 1 ; i++)
+		{
+			x = 0 ;
+			DQ(D[i],D[i+1],i+1) ; 
+			printf("%.10f ",x) ; 
+		}
+		cout << endl ; 
+	}
+	return 0 ; 
+}
+
+2
+457 468 333 321
+3
+1 2 3 1 2 1
+4
+2 3 5 7 3 2 7 5
+5
+3 11 12 19 29 542 661 450 521 366	
+6
+42 75 88 94 113 144 669 551 355 344 294 155
+7
+62 86 279 323 363 516 579 810 749 736 297 136 107 52
+8
+10 34 64 73 93 97 101 122 466 463 441 373 315 292 225 83
+10
+9 14 38 39 48 73 179 190 207 302 560 497 640 722 437 259 449 470 709 520
