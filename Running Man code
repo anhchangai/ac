@@ -1,3 +1,74 @@
+#include <iostream>
+#pragma warning (disable:4996)
+using namespace std;
+int nMax, D, answer, visit[6];
+struct chay {
+	int phut, giay, nang_luong;
+};
+
+chay Kieu[6];
+
+bool check(int i, int nLuong){
+	if(nLuong < Kieu[i].nang_luong) 
+		return false;
+	return true;
+}
+
+
+void BT(int dem, int time, int nLuong){
+	if(dem == D){
+		if(time < answer && answer != -1){
+			answer = time;
+		}
+		return;
+	}
+	if(time > answer) return;
+	if(nLuong < 0) return;
+	for(int i = 0; i < 5; i++){
+		int nhan = 0;
+		if(visit[i] == 0)
+		{
+			for(int k = 1; k <= D; k++){
+				if(nLuong - k*Kieu[i].nang_luong >= 0){
+					nhan = k;
+				}else {
+					break;
+				}
+			}
+			visit[i] = 1;
+			BT(dem + nhan, time + Kieu[i].phut * 60 * nhan + Kieu[i].giay * nhan, nLuong - Kieu[i].nang_luong * nhan);
+			visit[i] = 0;
+		}
+	}
+}
+
+
+int main(){
+
+	//freopen("Text.txt", "r", stdin);
+	int T; cin >> T;
+	for(int tc = 1; tc <= 7; tc++){
+		cin >> nMax >> D;
+		int count = 0;
+		for(int i = 0; i < 5; i++){
+			visit[i] = 0;
+			cin >> Kieu[count].phut >> Kieu[count].giay >> Kieu[count].nang_luong;
+			count++;
+		}
+		answer = 1e9;
+		BT(0, 0, nMax);
+		cout << "Case #" << tc << endl ;
+		if(answer == 1e9){
+			cout << "-1" << endl;
+		}
+		else
+			cout << answer/60 << " " << answer % 60 << endl;
+	}
+	return 0;
+}
+
+
+
 #include<iostream>
 using namespace std;
 int M,D,k[5][3],b[5][2];
