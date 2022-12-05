@@ -1,0 +1,112 @@
+#include <iostream>
+
+using namespace std ; 
+int ans, n, d;
+int Gate[2][4];
+int visit[100];
+int select[2][4];
+int V[4];
+void Day(int x, int y) 
+{
+		// TODO Auto-generated method stub
+		int k=0;
+		int u =Gate[0][x], v;
+		if ( visit[u] == 0)
+			{
+				visit[u] =1;
+				k++;
+				d++;
+			}
+		while (k < Gate[1][x] && y == 1)
+		{
+			u--;
+			if (u >=1 && k < Gate[1][x] && visit[u] == 0)
+			{
+				visit[u] =1;
+				k++;
+				d = d+ Gate[0][x] -u +1;
+			}
+			
+			v = 2*Gate[0][x] - u;
+
+			if (v <= n && k < Gate[1][x] && visit[v] == 0)
+			{
+				visit[v] =1;
+				k++;
+				d = d+ v - Gate[0][x] +1;
+			}
+		}
+
+		while (k < Gate[1][x] && y == 2)
+		{
+			u++;
+			if (u <= n && k < Gate[1][x] && visit[u] == 0)
+			{
+				visit[u] =1;
+				k++;
+				d = d+ u - Gate[0][x] +1;
+			}
+			
+			v = 2*Gate[0][x] - u;
+
+			if (v >= 1 && k < Gate[1][x] && visit[v] == 0)
+			{
+				visit[v] =1;
+				k++;
+				d = d+ Gate[0][x] -v +1;
+			}
+		}
+	}
+void backtrack(int x) 
+{
+
+		if (x > 3)
+		{
+			d =0;
+			for(int i =1; i<=n; i++) visit[i] =0;
+			for(int i =1; i<=3; i++)
+			{
+				Day(select[0][i], select[1][i]);
+			}
+			if (d < ans) ans=d;
+		}
+		else
+		{
+			for (int i = 1; i<=3; i++)
+				if (V[i] ==0)
+				{
+					V[i] =1;
+					select[0][x] =i;
+					select[1][x] = 1;
+					backtrack(x+1);
+					select[1][x] = 2;
+					backtrack(x+1);
+					V[i] =0;
+				}
+		}
+	}
+int main()
+{
+	freopen("input.txt" , "r" , stdin) ; 
+	int T ; 
+	cin >> T ; 
+	for(int tc = 1 ; tc <= T ; tc ++)
+	{
+		ans = 9999 ; 
+		d = 0 ; 
+		cin >> n ; 
+		for (int i = 1; i <= 3; i++) {
+				cin >> Gate[0][i] >> Gate[1][i] ;
+			}
+			backtrack(1);
+			cout << ans  ;
+	}
+
+	return 0 ; 
+}
+
+1
+10
+4 5 
+6 2
+10 2
