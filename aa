@@ -84,3 +84,89 @@ int main() {
 	}
 	return 0;
 }
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <iostream> 
+using namespace std;
+int A[5] = {1,2,3,4,5} ; 
+int vs[5] ; 
+int result[5] ; 
+void bt(int i)
+{
+	if(i == 5)
+	{
+		for(int j = 0 ; j < 5 ; j++)
+		{
+			if(vs[j]) 
+			{
+				cout << A[j] << " " ;
+			}
+		}
+		cout << endl ; 
+		return ; 
+	}
+
+	if(!vs[i])
+	{
+		vs[i] = 1 ; 
+		bt(i+1) ;
+		vs[i] = 0 ; 
+		bt(i+1) ; 
+	}
+}
+void th(int i , int k , int start )
+{
+	if(i == k)
+	{
+		for(int j = 0 ; j < 5 ; j++)
+		{
+			if(vs[j]) 
+			{
+				cout << A[j] << " " ;
+			}
+		}
+		cout << endl ; 
+		return ; 
+	}
+
+	for(int j = start ; j < 5 ;j++)
+	{
+		if(!vs[j]) 
+		{
+			result[i] = A[j] ; 
+			vs[j] = 1 ; 
+			th(i+1,k,j) ; 
+			vs[j] = 0 ; 
+		}
+	}
+}
+
+void hv(int i)
+{
+	if(i == 5)
+	{
+		for(int j = 0 ; j < 5 ; j++)
+		{
+			cout << result[j] << " " ; 
+		}
+		cout << endl ; 
+		return ; 
+	}
+
+	for(int j = 0 ; j < 5 ;j++)
+	{
+		if(!vs[j]) 
+		{
+			result[i] = A[j] ; 
+			vs[j] = 1 ; 
+			hv(i+1) ; 
+			vs[j] = 0 ; 
+		}
+	}
+}
+int main() {
+	//bt(0); 
+	th(0,3,0) ; 
+	hv(0) ; 
+	return 0 ; 
+}
