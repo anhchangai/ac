@@ -1,0 +1,185 @@
+Hugo được giao bán dầu trên một mạng lưới đường ống dẫn dầu, mỗi một vị trí sẽ thiết lập một loại đường ống khác nhau dựa vào địa hình. Sau khi đi khảo sát, Hugo biết rằng mạng lưới đường ống được tạo thành từ 7 loại ống như bên dưới.
+
+1.    Dầu có thể đi từ trái sang phải từ trên xuống dưới và ngược lại.
+
+2.    Dầu có thể đi từ trên xuống dưới và ngược lại
+
+3.    Dầu có thể đi từ trái sang phải và ngược lại
+
+4.    Dầu có thể đi từ trên sang phải và ngược lại
+
+5.    Dầu có thể đi từ dưới sang phải và ngược lại
+
+6.    Dầu có thể đi từ dưới sang trái và ngược lại
+
+7.    Dầu có thể đi từ trên sang trái và ngược lại
+
+Tuy nhiên, để bán dầu, Hugo cần phải bơm dầu vào đường ống. Sức người có hạn, Hugo chỉ có thể bơm dầu trong một khoảng thời gian nhất định, mỗi một giờ dầu mới chảy được hết một đường ống. Ví dụ: Hugo có thể bơm dầu trong 3 giờ, điều đó có nghĩa là từ vị trí bơm dầu, dầu chỉ có thể chảy đến tối đa xa nhất cách đó 3 ô. Dầu có thể chảy theo bất kỳ hướng nào miễn là có kết nối
+
+5
+
+5 6 2 1 3
+
+0 0 5 3 6 0
+
+0 0 2 0 2 0
+
+3 3 1 3 7 0
+
+0 0 0 0 0 0
+
+0 0 0 0 0 0
+
+5 6 2 2 6
+
+3 0 0 0 0 3
+
+2 0 0 0 0 6
+
+1 3 1 1 3 1
+
+2 0 2 0 0 2
+
+0 0 4 3 1 1
+
+10 10 4 3 9
+
+0 0 0 0 0 0 0 0 0 0
+
+0 0 0 7 5 0 5 0 0 0
+
+0 0 3 2 2 6 0 0 0 0
+
+0 4 7 2 2 2 7 0 0 4
+
+0 3 0 1 1 2 2 0 0 5
+
+0 5 6 1 1 1 1 6 2 5
+
+7 4 1 2 0 0 4 6 0 0
+
+5 3 1 7 0 2 2 6 5 7
+
+7 3 2 1 1 7 1 0 2 7
+
+3 4 0 0 4 0 5 1 0 1
+
+...
+
+ 
+
+[Output]
+
+ 
+
+- The total number of pipes that fuel can flow to
+
+Case #1
+
+5
+
+Case #2
+
+15
+
+Case #3
+
+29
+
+import java.util.Scanner;
+
+public class Solution {
+	static int T,N,M,P,SX,SY, MAXNM=51;
+	static int map[][] = new int[MAXNM][MAXNM];
+	// tren, phai, duoi, trai
+	static int t[][] = {{1,1,1,1},{1,0,1,0},{0,1,0,1},{1,1,0,0},{0,1,1,0},{0,0,1,1},
+			{1,0,0,1}};
+	static int dx[] = {-1,0,1,0};
+	static int dy[] = {0,1,0,-1};
+	static int Qx[] = new int[100000];
+	static int Qy[] = new int[100000];
+	static int Qp[] = new int[100000];
+	static int Pmap[][] = new int[MAXNM][MAXNM];
+	static int r,f;
+	static int ans;
+	static void bfs(int sx, int sy) {
+		//push
+		r=f=-1;
+		f++;
+		Qx[f]=sx;
+		Qy[f]=sy;
+		while(r!=f) {
+			//pop
+			r++;
+			int curx = Qx[r];
+			int cury = Qy[r];
+			int type = map[curx][cury];
+			int tempP = Pmap[curx][cury];
+			// kiem tra 4 huong cua o hien tai
+			if (tempP>1) { // neu con nang luon
+				for(int i=0;i<4;i++) {
+					int xx = curx+dx[i];
+					int yy = cury+dy[i];
+					if (t[type][i] == 1) {// neu co duong dan
+						// kiem tra o ben canh co duong dan khong
+						int tnear = (i+2)%4;
+						if (xx>=0&&yy>=0&&xx<=N&&yy<=M
+								&& map[xx][yy] != -1
+								&& Pmap[xx][yy] == -1
+								&& t[map[xx][yy]][tnear] == 1) {
+							// push
+							f++;
+							Qx[f]=xx;
+							Qy[f]=yy;
+							Pmap[xx][yy] = tempP-1;
+							ans++;
+						}
+					}
+				}
+			}
+			
+			
+		}
+	}
+	public static void main(String[] args) throws Exception {
+		//System.setIn(new FileInputStream("input.txt"));
+		Scanner sc = new Scanner(System.in);
+		T = sc.nextInt();
+		for (int tc = 1; tc <= T; tc++) {
+			System.out.println("Case #"+tc);
+			ans = 1;
+			N =sc.nextInt();
+			M=sc.nextInt();
+			SX=sc.nextInt();
+			SY=sc.nextInt();
+			P=sc.nextInt();
+			//reset
+			reset();
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < M; j++) {
+					map[i][j] = sc.nextInt()-1;
+				}
+			}
+			bfs(SX, SY);
+			System.out.println(ans);
+//			in(Pmap);
+		}
+	}
+	private static void in(int[][] pmap2) {
+		// TODO Auto-generated method stub
+		for(int i =0;i<N;i++) {
+			for(int j =0;j<M;j++) {
+				System.out.print(Pmap[i][j]+" ");
+			}System.out.println();
+		}
+	}
+	private static void reset() {
+		for(int i =0;i<N;i++) {
+			for(int j=0;j<M;j++) {
+				Pmap[i][j] = -1;
+			}
+		}
+		Pmap[SX][SY] = P;
+	}
+	
+}
