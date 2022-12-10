@@ -164,6 +164,123 @@ int main()
 	return 0 ; 
 }
 
+code canh:
+#include <iostream>
+
+using namespace std ; 
+int n ;
+int A[4][2] ;
+int select[2][3] ; 
+int vsG[5] ; 
+int vs[110] ; 
+int d ; 
+int kq = 999999 ; 
+int c = 0 ; 
+void vaoCua(int g , int y)
+{
+	int gate = A[g][0] ;
+	int sn = A[g][1] ; 
+	int l = gate , r ; 
+
+	if(vs[gate] == 0 )
+	{
+		vs[gate] = 1 ; 
+		sn -- ; 
+		d++ ; 
+	}
+	while(sn > 0 && y == 1)
+	{
+		l -- ; 
+		if(l>=1 && vs[l] == 0 && sn > 0 )
+		{
+			vs[l] = 1 ; 
+			sn-- ; 
+			d += (gate - l) + 1 ; 
+		}
+
+		r = 2*gate - l ; 
+		if(r<=n && vs[r] == 0 && sn > 0 )
+		{
+			vs[r] = 1 ; 
+			sn-- ; 
+			d += (r - gate) + 1 ; 
+		}
+	}
+	r = gate ; 
+	while(sn > 0 && y == 2)
+	{
+		r ++ ; 
+		if(r<=n && vs[r] == 0  && sn > 0)
+		{
+			vs[r] = 1 ; 
+			sn-- ; 
+			d += (r - gate) + 1 ; 
+		}
+
+		l = 2*gate - r ; 
+		if(l>=1 && vs[l] == 0 && sn > 0)
+		{
+			vs[l] = 1 ; 
+			sn-- ; 
+			d += (gate - l) + 1 ; 
+		}
+	}
+}
+void bt(int id)
+{
+	if(id == 3)
+	{
+		for(int i = 0 ; i < 3 ; i++)
+		{
+			vaoCua(select[0][i] , select[1][i]) ; 
+
+		}
+		if(kq > d)
+		{
+			kq = d ; 
+		}
+		for(int i = 0 ; i < 110 ; i++)
+		{
+			vs[i] = 0 ; 
+		}
+		d = 0 ; 
+		return ; 
+	}
+	for(int i = 1 ; i <= 3 ; i++)
+	{
+		if(!vsG[i])
+		{
+			vsG[i] = 1 ; 
+			select[0][id] = i ; 
+			select[1][id] = 1 ; 
+			bt(id+1) ; 
+			select[1][id] = 2 ; 
+			bt(id+1) ; 
+			vsG[i] = 0 ;
+		}
+	}
+}
+int main()
+{
+	freopen("input.txt" , "r" , stdin) ; 
+	int T ; 
+	cin >> T ; 
+	for(int tc = 1 ; tc <= T ; tc ++)
+	{
+		cin >> n ; 
+		d = 0 ; 
+		kq = 999999 ; 
+		for(int i = 1 ; i <= 3 ; i++)
+		{
+			cin >> A[i][0] >> A[i][1] ; 
+		}
+		bt(0) ; 
+		cout << kq << endl  ; 
+	}
+
+	return 0 ; 
+}
+
 1
 10
 4 5 
