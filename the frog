@@ -1,3 +1,96 @@
+
+#include<iostream>
+using namespace std;
+#define cons 202
+int so_la;
+int la_x[cons];
+int la_y[cons];
+int ban_kinh[cons];
+int check[cons];
+int luu_buoc[cons];
+
+int tim()
+{
+	int index=0;
+	int minmin = 9000000;
+	for (int i = 0; i < so_la; i++)
+	{
+		if(check[i] == 0 && minmin > luu_buoc[i])
+		{
+			minmin = luu_buoc[i];
+			index = i;
+		}
+	}
+	return index;
+}
+
+int tinh(int a, int b)
+{
+	int kq = (la_x[a] - la_x[b])*(la_x[a] - la_x[b]) + (la_y[a] - la_y[b])*(la_y[a] - la_y[b]); 
+
+	if(kq <= (40 + ban_kinh[a] + ban_kinh[b])*(40 + ban_kinh[a] + ban_kinh[b])) return 1;
+	else if(kq > (90 + ban_kinh[a] + ban_kinh[b])*(90 + ban_kinh[a] + ban_kinh[b])) return 1000000;
+	return 500;
+}
+
+int main()
+{
+	//freopen("input.txt","r",stdin);
+	int th;cin>>th;
+	for (int tc = 1; tc <= th; tc++)
+	{
+		cin >> so_la;
+		for (int i = 0; i < so_la; i++)
+		{
+			cin >> la_x[i] >> la_y[i] >> ban_kinh[i];
+			check[i] = 0;
+			luu_buoc[i] = 1000000;
+		}
+		
+		int vt_la = 0;
+		check[vt_la] = 1; // la dau tien
+		luu_buoc[vt_la] = 0;
+
+		while (vt_la != so_la - 1)
+		{
+			for (int i = 1; i < so_la; i++)
+			{
+				int temp = tinh(vt_la,i);
+				if(temp + luu_buoc[vt_la] < luu_buoc[i])
+					luu_buoc[i] = luu_buoc[vt_la] + temp;
+			}
+			vt_la = tim();
+			check[vt_la] = 1;
+		}
+		if(luu_buoc[vt_la] >= 1000000)
+			cout << "-1" << endl;
+		else 
+			cout << luu_buoc[vt_la] / 500 << " " << luu_buoc[vt_la] % 500 << endl;
+
+	}
+
+	return 0;
+}
+9
+2
+1 10 10
+100 100 15
+4
+0 10 10
+20 60 12
+30 10 10
+70 10 8
+10
+41 7 5
+110 59 5
+38 108 5
+65 11 4
+81 101 2
+112 17 1
+21 44 3
+126 88 6
+49 22 6
+14 103 4
 import java.util.Scanner;
 
 
